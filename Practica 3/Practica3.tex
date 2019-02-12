@@ -1,0 +1,82 @@
+\documentclass{article}
+
+\usepackage[spanish]{babel}
+\usepackage[numbers,sort&compress]{natbib}
+\usepackage{graphicx}
+\usepackage{url}
+\usepackage{amsmath}
+\usepackage{hyperref}
+\usepackage[top=12mm, bottom=16mm, left=10mm, right=10mm]{geometry}
+\setlength{\parskip}{2mm}
+\setlength{\parindent}{0pt}
+
+\author{Abraham Azael Morales Juárez  1422745}
+\title{Teoría de Colas}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\section{Introducción}
+La teoría de colas, es el estudio matemático de las características de sistemas de líneas o colas. Estas  se presentan diariamente en la vida cotidiana. Esto ocurre inclusive, por ejemplo, cuando realizamos una llamada, en ocasiones tenemos que esperar porque el usuario está ocupado. Esto también ocurre en el supermercado, almacenes, aeropuertos, solo por mencionar algunos. Por esta razón es gran importancia realizar estudios en el comportamiento de estos tipos de sistemas \cite{REF2}.
+
+\section{Objetivos}
+Examinar cómo las diferencias en los tiempos de ejecución de los diferentes ordenamientos cambian cuando se varía el número de núcleos asignados al cluster.
+Usar datos de entrada de un vector que contiene primos grandes y no-primos con un mismo número de dígitos.
+Investiga también el efecto de la proporción de primos y no primos en el vector.
+Además el efecto de la magnitud de los números incluidos en el vector, con pruebas estadísticas adecuadas \cite{REF1}.
+
+\section{Resultados y Discusión}
+En los datos obtenidos de la simulación se puede observar claramente la gran diferencia de procesamiento de datos, debido a la cantidad de núcleos destinados para trabajar con la información.  También como era de esperarse, la cantidad de información influye en el tiempo que tardó en realizarse el experimento.
+Se realizó un análisis en paralelo y las especificaciones utilizados para la realización de esta práctica son las siguientes: 1 núcleo, 6 núcleos, y 7 núcleos, para los cuales los rangos de números fueron: 10,000 – 50,000, 50,000 – 250,000 y 250,000 – 500,000. Cabe destacar que se usaron 2 procesadores distintos core i7 y core i5, 8 y 2 núcleos respectivamente.
+Se usaron distintos códigos los cuales definían funciones, tanto para números primos como para compuestos, que son los siguientes códigos:
+\begin{figure}[hbtp]
+\centering
+\includegraphics[width=7cm]{funciones.PNG}
+\caption{Código para designar la función primo y compuesto}
+\end{figure}
+EL código para obtener la información y almacenarla en vectores es el siguiente:
+\begin{figure}[hbtp]
+\centering
+\includegraphics[width=18cm]{../todo.PNG}
+\caption{Código vector, boxplot y paralelo}
+\end{figure}
+
+En la figura 3, que son gráficas caja-bigote, se presentan los resultados obtenidos del análisis con 7 núcleos, en los cuales las mejores gráficas se obtienen con los rangos menores, es decir, 10,000 – 50,000, en esta gráfica se observa que se obtuvo los primeros resultados casi al mismo tiempo, pero teniendo datos muy irregulares con bigotes muy largos y en donde particularmente con los números compuestos, se observa más claramente la priorización del análisis debido a que, realizar todos las acciones que se necesitan partiendo de datos grandes es más complicada que partir de datos más sencillos. Aunque, se puede observar la diferencia que hay entre el análisis de 7 núcleos y de 1 núcleo. Sin embargo, el análisis con el de 6 núcleos, no hubo mucha variación con el de 1, a diferencia de lo que se ha reportado \cite{REF4}, lo más probable fue por el hecho que las computadoras usadas tienen designaciones prioritarias que pueden requerir el uso de núcleos para actualizarse o simplemente ejecutarse en segundo plano \cite{REF5}.
+
+\begin{figure}[hbtp]
+\includegraphics[width=9.5cm]{../elchido.png}  \includegraphics[width=9.5cm]{../10000.png} 
+\caption{7, 6 y 1 núcleo, 10,000 - 50,000}
+\end{figure}
+
+\includegraphics[width=9.5cm]{../elchido6N10000.png} \centering
+                                               
+\begin{figure}[hbtp]                                  
+\includegraphics[width=9cm]{../50000chido.png}   \includegraphics[width=9cm]{../500001.png} 
+\caption{ 7, 6 y 1 Núcleo 50,000 - 250,000}
+\end{figure}                                               
+\includegraphics[width=9cm]{../2500006N.png}   \centering   
+
+Con los resultados de 50000 – 250000, igual que los anteriores son muy distintos a los esperados y reportados \cite{REF4}, los tiempos de análisis son más cortos, (al menos con los números primos), con la computadora que tiene el procesador core i5. Mientras que con los 6 y 7 núcleos fue un poco mayor el tiempo esperado, pero similar entre ellos.
+
+\begin{figure}[hbtp]                            \includegraphics[width=9cm]{../250a5001N.png} 
+\includegraphics[width=9cm]{../250a500.png}   
+\caption{ 7 y 1 núcleo, 250,000 - 500,000}
+\end{figure}
+
+ 
+En el análisis más grande que se realizó, no se pudo obtener con 6 núcleos, por el tiempo de procesamiento que cada corrida requería. Aquí si se observó una diferencia muy grande entre los procesadores core i7 y el core i5, específicamente con los números compuestos, como se esperaba., y un poco menos con los números primos. Aunque, los resultados obtenidos siguen viéndose afectados, principalmente por los sistemas operativos instalados, que priorizan funciones de Windows ocasionando que los núcleos hagan otras tareas además de las asignadas. Afectando el proceso en paralelo que se está ejecutando \cite{REF5}.
+
+\vfill
+
+\section{Conclusiones}
+Estos análisis son de gran importancia, debido a que nos explican el comportamiento de las líneas de espera y el como poder tratar con ellas, con las herramientas disponibles.
+El uso de la herramienta paralelo es de gran importancia, debido a que con estos se puede llegar a predecir el comportamiento de distintos fenómenos o sistemas.
+Los equipos que se utilicen para realizar este tipo de simulaciones necesitan tener un control total sobre el software, para poder manipular y priorizar de manera voluntaria los núcleos.
+
+\bibliographystyle{plainnat}
+\bibliography{REFPract3}
+
+
+\end{document}
