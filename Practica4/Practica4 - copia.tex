@@ -1,0 +1,116 @@
+\documentclass{article}
+\usepackage[spanish]{babel}
+\usepackage[numbers,sort&compress]{natbib}
+\usepackage{graphicx}
+\usepackage{url}
+\usepackage{amsmath}
+\usepackage{hyperref}
+\usepackage{float}
+\usepackage{listings}
+\usepackage{subfigure} 
+\usepackage[top=15mm, bottom=15mm, left=15mm, right=15mm]{geometry}
+\setlength{\parskip}{2mm}
+\setlength{\parindent}{0pt}
+
+\author{Abraham Azael Morales Juárez  1422745}
+\title{Diagramas de Voronoi}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+
+\section{Objetivos}
+Analizar la relación entre el número de semillas y del tamaño de la matriz, tomando en cuenta los largos de las grietas. 
+Observar cuantas celdas (diagramas voronoi) existen alrededor de la grieta. Además de medir la mayor distancia de Manhattan entre el extremo que esta a una distancia mayor del borde \cite{REF1}.
+
+\section{Metodología y resultados}
+Se colocó una cantidad k de semillas al azar en una matriz que representaba un material, posteriormente se produjo en ellas la presencia de diagramas voronoi desarrolladas a partir de la ubicación de las semillas \cite{REF2}. La cantidad de semillas fue uniforme en intervalos enteros (1:k), ver figura 1.
+
+\begin{figure}[H]
+\includegraphics[width=5cm]{../../a.png}
+\centering
+\caption{Semillas}
+\end{figure}
+
+  
+ 
+Después se determinó que espacios vacíos corresponden al espacio de cada semilla, en otras palabras, para cada posición que vale cero, se calculó la distancia euclideana entre las semillas y la posición de interés, ver figura 2.
+
+\begin{figure}[H]
+\includegraphics[width=5cm]{../../b.png}
+\centering
+\caption{Celdas Voronoi}
+\end{figure}
+
+
+Estas celdas representan núcleos en algún proceso de cristalización en un material y se provoca una grieta en ese material, ver figura 3, la cual se propaga con mayor velocidad entre las fronteras de los núcleos y viaja dificultosamente por el interior de la celda. Además, se toma en cuenta que no hay propagación preferencial por parte de la grieta.
+
+\begin{figure}[H]
+\includegraphics[width=10cm]{../../c.png}
+\centering
+\caption{Grietas}
+\end{figure}
+
+
+Para el desarrollo de la práctica se consideraron diferentes parámetros: tamaño de matriz, 50x50, 60x60 y 70x70, cantidad de semillas k, 20, 25 y 30.
+En la figura 4, se tienen las distancias Manhattan de cada una de las matrices, además se observa influencia de la cantidad de semillas aplicada en la generación de grietas, también que a pesar de la variación que se aplicó no hubo diferencia significante en las distancias manhattan, sin embargo, sí hubo en el tamaño de las grietas generadas.
+
+\begin{figure}[H]                         \includegraphics[width=7cm]{../man.png} 
+\centering
+\includegraphics[width=7cm]{../grieta.png}
+\caption{Distancias de grietas y distancia Manhattan}
+\end{figure}
+
+Debido a la poca variación de la cantidad de semillas en la matriz, no se puede observar claramente la disminución de la distancia manhattan y el largo de las grietas generadas.
+
+De la misma manera se observó la influencia de la cantidad de semillas y la generación de grietas en las distintas matrices, ver figura 5 y 6.
+
+\begin{figure}[H]                                        \includegraphics[width=8cm]{semillitas2.png} 
+\centering 
+\includegraphics[width=9cm]{semillas1.png}
+\caption{Grietas generadas matriz 50 y 60}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=9cm]{matriz70.png}
+\caption{Grietas matriz 70}
+\end{figure}
+
+Debido a la baja variación en los parámetros, las diferencias son mínimas en las figuras. Lo cuál abre paso a una examinación extra con parámetros distintos. 
+
+Al final se realizó un análisis de varianza (ANOVA):
+\begin{lstlisting}
+anova<-data.frame(datos)
+stacked_groups<-stack(anova)
+stacked_groups
+resultadosa<-aov(values ~ ind, data = stacked_groups)
+summary(resultadosa) 
+\end{lstlisting}
+
+
+Arrojandonos los siguientes resultados
+\begin{lstlisting}
+                            Df   Sum Sq Mean Sq F value Pr(>F)    
+ind             4 14407296 3601824    3813 <2e-16 ***
+Residuals   15995 15109818     945                   
+
+Signif. codes:  0 "***" 0.001 "**" 0.01 "*" 0.05 "." 0.1 " " 1                  
+\end{lstlisting}
+
+\section{Conclusiones}
+Conforme aumenta el número de semillas las grietas tienden a aumentar de tamaño, la presencia de un ambiente con mayor número de fronteras propiciara la propagación de las grietas con mayor facilidad.
+Con un número bajo en variables las diferencias son muy pocas, en comparación con lo que ya se ha reportado con parámetros mayores, tanto en cantidad de semillas como en largo de matrices.
+Entre mayor sea la matriz y menor cantidad de semillas se coloquen, la grieta avanzara con mayor dificultad.
+
+
+
+\bibliographystyle{plainnat}
+\bibliography{referencia}
+
+
+
+
+\end{document}
