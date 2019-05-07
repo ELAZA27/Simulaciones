@@ -1,0 +1,130 @@
+\documentclass{article}
+\usepackage[spanish]{babel}
+\usepackage[numbers,sort&compress]{natbib}
+\usepackage{graphicx}
+\usepackage{url}
+\usepackage{amsmath}
+\usepackage{hyperref}
+\usepackage{float}
+\usepackage{color}
+\definecolor{gray86}{gray}{.86}
+\definecolor{gray75}{gray}{.75}
+\definecolor{gray45}{gray}{.45}
+\usepackage{listings}
+\lstset{ 
+language=C,                
+basicstyle=\footnotesize,      
+numbers=left,                  
+numberstyle=\footnotesize,     
+stepnumber=1,                   
+numbersep=5pt,                  
+backgroundcolor=\color{gray86},  
+showspaces=false,              
+showstringspaces=false,         
+showtabs=false,                
+frame=single,           
+tabsize=2,          
+captionpos=b,          
+breaklines=true,        
+breakatwhitespace=false,   
+escapeinside={\%*}{*)}          
+}
+\usepackage{subfigure} 
+\usepackage[top=15mm, bottom=15mm, left=15mm, right=15mm]{geometry}
+\setlength{\parskip}{2mm}
+\setlength{\parindent}{0pt}
+
+\author{Abraham Azael Morales Juárez  1422745}
+\title{Práctica 12: red neuronal}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\section{Introducción}
+En esta práctica se trata de lo que se conoce como aprendizaje a máquina o una red neuronal, este es un proceso que permite a una computadora aprender a interpretar el comportamiento o naturaleza de un conjunto de datos a partir de observaciones o muestras \cite{REF2}. El elemento básico de una red neuronal es un perceptrón que es un hiperplano que se coloca en la frontera de la separación de entradas verdaderas y falsas \cite{REF1}.
+Con la dimensión del perceptrón $d$ dada a lo largo de un vector $x$ de entrada y representando el estado del perceptrón por $w$ que tiene los pesos \cite{REF1}.
+\section{Objetivos}
+Paralelizar el código y estudiar de manera sistemática el desempeño de la red neuronal para los diez dígitos en función de las tres probabilidades asignadas (ngb) variando estos valores.
+\section{Resultados}
+El código base \cite{REF1} se modificó para paralelizar utilizando como referencia el código de un compañero \cite{REF3}. Además de la paralelización se midió el desempeño del código tomando en cuenta la varianza con respecto a la normal de los valores obtenidos. Los resultados se pueden observar en las figuras 1 y 2.
+\begin{figure}[H]
+\centering
+\includegraphics[width=9cm]{tiempo.png}
+\caption{Se realizo la comparación de los métodos en secuencial y en paralelo, los tiempos arrojaron que el paralelo fue el mejor.}
+\end{figure}
+Se agrega un fragmento del código con el cual se obtuvó estos resultados.
+\begin{lstlisting}[frame=single]
+suppressMessages(library(doParallel))
+Mc <- makeCluster(detectCores() - 1)
+registerDoParallel(Mc)
+
+prueba1 <- microbenchmark({
+  contadores <- matrix(rep(0, k*(k+1)), nrow=k, ncol=(k+1))
+  rownames(contadores) <- 0:tope
+  colnames(contadores) <- c(0:tope, NA)
+  conta <- foreach(t = 1:300, .combine = "rbind", .export = c("tope", "dim", "modelos", "neuronas", "pixeles")) %dopar% newr()
+  for (i in 1:300){
+    contadores[conta[i, 1], conta[i, 2]] <- contadores[conta[i, 1], conta[i, 2]] + 1
+  }
+}
+times = repe, unit = "s")
+stopCluster(Mc)
+
+entrenamientos <- cbind("Secuencial" = entrena$time)
+pruebas <- cbind("Secuencial" = prueba$time, "Paralela" =prueba1$time)
+library(ggplot2)
+pruebas <- melt(pruebas)
+ggplot(tests, aes(x=as.factor(Var2), y=value/10000000)) + geom_violin(aes(fill=as.factor(Var2))) + 
+  geom_boxplot(fill= "#d6d4bc", width=0.1, lwd =1.5) + scale_fill_manual( values=c("orange", "brown")) +
+  labs(x = "Ejecucion", y = "Segundos") + theme_light(base_size = 14) + guides(fill=FALSE) 
+ggsave("Tiempo.png")
+\end{lstlisting}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=9cm]{Evalnorm.png}
+\caption{Normalidad de los resultados obtenidos}
+\end{figure}
+En la figura 2 se puede observar que el mayor porcentaje de los valores dados se encuentran muy cerca de la normalidad.
+Para obtener mayor información se realizó un análisis de varianza, cuyos resultados se presentan en la figura 3 se presenta una tabla, en la cual se observan que la mayor presencia del color de píxeles son el blanco y negro, del cual el píxel negro presento una mayor prevalencia.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=12cm]{tabla1.png}
+\caption{Resultados del análisis de varianza}
+\end{figure}
+También se presenta un fragmente del código del cual se uso para poder obtener la normalidad de los valores. 
+
+\begin{lstlisting}[frame=single]
+print(xtable(summary(av), type='latex'), file="Tabla_valores.txt")
+ggQQ <- function(lm) {
+  # https://stackoverflow.com/questions/4357031/qqnorm-and-qqline-in-ggplot2/19990107#19990107
+  d <- data.frame(std.resid = rstandard(lm))
+  y <- quantile(d$std.resid[!is.na(d$std.resid)], c(0.25, 0.75))
+  x <- qnorm(c(0.25, 0.75))
+  slope <- diff(y)/diff(x)
+  int <- y[1L] - slope * x[1L]
+  
+  p <- ggplot(data=d, aes(sample=std.resid)) +
+    stat_qq(shape=1, size=3) +           # open circles
+    labs(title=NULL,             # plot title
+         x="Quantiles te\u{f3}ricos",      # x-axis label
+         y="Residuales estandarizados") +   # y-axis label
+    geom_abline(slope = slope, intercept = int, col = "red", lwd = 1)  # dashed reference line
+  p <- p + theme_light(base_size = 14)
+  return(p)
+}
+ggQQ(lm_model)
+ggsave("Normalidad.png")
+\end{lstlisting}
+
+\section{Conclusiones}
+Se redujo los tiempos del procesamiento al usar el método paralelo. Los datos arrojados por los experimentos muestran que los datos son normalmente distribuidos, pero no tienen la misma proporción de distribución porque las varianzas no son iguales a 1. Además, que los píxeles con mayor presencia con los blancos y negros, del cual resalta por poco el píxel negro.
+\bibliographystyle{plainnat}
+\bibliography{ref12}
+
+
+
+\end{document}
